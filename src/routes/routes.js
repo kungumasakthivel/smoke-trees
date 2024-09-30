@@ -84,7 +84,26 @@ routes.post('/register', (req, res) => {
 });
 
 routes.get('/register', (req, res) => {
-
+    db.all(
+        'SELECT u.id, u.name, a.address, a.user_id FROM user u JOIN address a ON u.id = a.user_id',
+        (err, rows) => {
+            if(err) {
+                return res.status(400).json({
+                    message: "error getting address",
+                    status: 0
+                });
+            }
+            if(!rows) {
+                return res.status(400).json({
+                    message: "empty user and address",
+                    status: 0
+                });
+            }
+            res.json({
+                "data": rows
+            });
+        }
+    )
 });
 
 module.exports = routes;
