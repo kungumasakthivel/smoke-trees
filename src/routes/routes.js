@@ -26,7 +26,7 @@ routes.post('/register', (req, res) => {
                         });
                     }
                     res.status(200).json({
-                        message: "new address added with existing user: " + row['id'],
+                        message: "new address added with existing user",
                         status: 1
                     });
                 }
@@ -58,7 +58,7 @@ routes.post('/register', (req, res) => {
                             });
                         }
                         if(row['COUNT(*)'] > 0) {
-                            db.rum(
+                            db.run(
                                 'INSERT INTO address (address, user_id) VALUES (?, ?)',
                                 [address, row['id']],
                                 function(err) {
