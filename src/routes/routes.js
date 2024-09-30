@@ -8,7 +8,7 @@ const routes = express.Router();
 routes.post('/register', (req, res) => {
     const {name, address} = req.body;
 
-    db.get('SELECT COUNT(*) FROM user WHERE name = ?', [name], (err, row) => {
+    db.get('SELECT COUNT(*), id FROM user WHERE name = ?', [name], (err, row) => {
         if(err) {
             return res.status(400).json({
                 message: "Error"
@@ -26,7 +26,7 @@ routes.post('/register', (req, res) => {
                         });
                     }
                     res.status(200).json({
-                        message: "new address added with existing user: " + row['id'],
+                        message: "new address added with existing user",
                         status: 1
                     });
                 }
@@ -48,7 +48,7 @@ routes.post('/register', (req, res) => {
                 );
 
                 db.get(
-                    'SELECT COUNT(*) FROM user WHERE name = ?',
+                    'SELECT COUNT(*), id FROM user WHERE name = ?',
                     [name],
                     (err, row) => {
                         if(err) {
@@ -57,8 +57,9 @@ routes.post('/register', (req, res) => {
                                 status: 0
                             });
                         }
+                        console.log(row);
                         if(row['COUNT(*)'] > 0) {
-                            db.rum(
+                            db.run(
                                 'INSERT INTO address (address, user_id) VALUES (?, ?)',
                                 [address, row['id']],
                                 function(err) {
@@ -70,7 +71,7 @@ routes.post('/register', (req, res) => {
                                     }
                                     return res.status(200).json({
                                         message: 'Successfully created new user and address',
-                                        status: 0
+                                        status: 1
                                     });
                                 }
                             )
@@ -80,6 +81,10 @@ routes.post('/register', (req, res) => {
             })
         }
     })
+});
+
+routes.get('/register', (req, res) => {
+
 });
 
 module.exports = routes;
