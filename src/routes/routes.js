@@ -57,7 +57,6 @@ routes.post('/register', (req, res) => {
                                 status: 0
                             });
                         }
-                        console.log(row);
                         if(row['COUNT(*)'] > 0) {
                             db.run(
                                 'INSERT INTO address (address, user_id) VALUES (?, ?)',
